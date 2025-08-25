@@ -1,0 +1,40 @@
+:root {
+  /* Primary - Navy Blue (Used for backgrounds and text colors) */
+  --w-color-primary-100: #d1e0f5;
+  --w-color-primary-200: #a3c1e6;
+  --w-color-primary-300: #759ed6;
+  --w-color-primary-400: #10438f; /* Base navy blue from logo */
+  --w-color-primary-500: #061375; /* Main page background */
+  --w-color-primary-600: #0b1458;
+  --w-color-primary-700: #0c1640;
+  --w-color-primary-800: #07062d;
+  --w-color-primary-900: #02061a;
+  --w-color-primary: var(--w-color-primary-500);
+  --w-color-primary-light: #343aec; /* Slightly lighter for hover */
+  --w-color-primary-text: #ffffff;
+
+  /* Secondary - Orange (Button and Icon Accent) */
+  --w-color-secondary-100: #ffedd5; /* Lighter orange */
+  --w-color-secondary-200: #fed7aa;
+  --w-color-secondary-300: #fdb575;
+  --w-color-secondary-400: #fc9c4a; /* Base orange from logo */
+  --w-color-secondary-500: #f28c3d; /* Hover color */
+  --w-color-secondary-600: #e0732a;
+  --w-color-secondary-700: #b85a20;
+  --w-color-secondary-800: #8c3d18;
+  --w-color-secondary-900: #5f3010;
+  --w-color-secondary: var(--w-color-secondary-400);
+  --w-color-secondary-hover: var(--w-color-secondary-500);
+
+  /* Tertiary - Removed (previously peach/gold, now unused) */
+
+  /* Accent for Highlights (Set to Secondary Orange) */
+  --w-color-accent: var(--w-color-secondary-400);
+
+  /* Form Styling */
+  --w-color-form-bg: #ffffff;
+  --w-color-form-text: #000000;
+  --w-color-button-bg: var(--w-color-secondary);
+  --w-color-button-hover: var(--w-color-secondary-hover);
+  --w-color-overlay: var(--w-color-secondary); /* Decorative circle */
+}
