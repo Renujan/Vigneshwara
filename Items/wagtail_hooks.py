@@ -1,7 +1,9 @@
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 from wagtail.admin.panels import FieldPanel,InlinePanel
-from .models import Brand,Item,Category
+from .models import Brand,Item,Category,Stock
+from django.contrib import messages
+from django.db import models
 
 
 # class ItemsViewSet(SnippetViewSet):
@@ -96,3 +98,35 @@ class CategoryViewSet(SnippetViewSet):
 
 
 register_snippet(CategoryViewSet)
+
+
+
+class StockViewSet(SnippetViewSet):
+    model = Stock
+    icon = "folder-open-inverse"
+    inspect_view_enabled = True
+    add_to_admin_menu = True
+    list_display = ("item", "quantity", "reorder_level", "last_updated")
+    list_export = ("item", "quantity", "reorder_level", "last_updated")
+    list_filter = ("item",)
+    search_fields = ("item__name",)
+
+    panels = [
+        FieldPanel("item"),
+        FieldPanel("quantity"),
+        FieldPanel("reorder_level"),
+    ]
+
+register_snippet(StockViewSet)
+
+
+# ✅ WARNINGS ON DASHBOARD@hooks.register("construct_main_menu")
+def check_low_stock(request, menu_items):
+    if request.user.is_superuser or request.user.is_staff:
+        low_stock_items = Stock.objects.filter(quantity__lte=models.F("reorder_level"))
+        if low_stock_items.exists():
+            item_names = ", ".join([s.item.name for s in low_stock_items])
+            messages.warning(
+                request,
+                f"⚠️ Low stock alert! Please reorder: {item_names}"
+            )

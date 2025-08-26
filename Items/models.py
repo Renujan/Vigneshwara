@@ -108,3 +108,33 @@ class ItemExtraImage(models.Model):
     def __str__(self):
         return f"Extra Image for {self.item.name}"
 
+
+class Stock(models.Model):
+    item = models.OneToOneField(
+        Item,
+        on_delete=models.CASCADE,
+        related_name="stock"
+    )
+    quantity = models.PositiveIntegerField(default=0)
+    reorder_level = models.PositiveIntegerField(default=10)  # alert if below
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.item.name} - {self.quantity} in stock"
+
+    def add_stock(self, qty):
+        self.quantity += qty
+        self.save()
+
+    def reduce_stock(self, qty):
+        if qty > self.quantity:
+            raise ValueError("Not enough stock available")
+        self.quantity -= qty
+        self.save()
+
+    @property
+    def needs_reorder(self):
+        return self.quantity <= self.reorder_level
+
+
+

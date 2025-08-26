@@ -1,15 +1,23 @@
 from rest_framework import serializers
-from .models import Item, ItemExtraImage
+from .models import Item, ItemExtraImage, Stock, Brand, BrandExtraImages
 
 class ItemExtraImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemExtraImage
         fields = ['id', 'image']
 
+class StockSerializer(serializers.ModelSerializer):
+    item_name = serializers.CharField(source="item.name", read_only=True)
+
+    class Meta:
+        model = Stock
+        fields = ["id", "item", "item_name", "quantity", "reorder_level", "last_updated", "needs_reorder"]
+
 class ItemSerializer(serializers.ModelSerializer):
     brand = serializers.CharField(source='brand.name')
     category = serializers.CharField(source='category.name')
     item_extra_images = ItemExtraImageSerializer(many=True, read_only=True)
+    stock = StockSerializer(read_only=True)   # ✅ new field
 
     class Meta:
         model = Item
@@ -25,11 +33,9 @@ class ItemSerializer(serializers.ModelSerializer):
             'is_new',
             'in_stock',
             'image',
-            'item_extra_images'
+            'item_extra_images',
+            'stock'
         ]
-
-from rest_framework import serializers
-from .models import Brand, BrandExtraImages
 
 class BrandExtraImagesSerializer(serializers.ModelSerializer):
     class Meta:
