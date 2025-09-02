@@ -18,9 +18,10 @@ urlpatterns = [
     path('enquire/', include('enquire.urls')),
     path('order/', include('order.urls')),
     
+    
 
     path("", include("home.urls")),
-    path("", include(wagtailadmin_urls)),
+    path("admin/", include(wagtailadmin_urls)),
     
     
 

@@ -25,20 +25,20 @@ class BillViewSet(SnippetViewSet):
     def get_urlpatterns(self):
         patterns = super().get_urlpatterns()
         # Add custom URL for PDF download
-        patterns = patterns + [
+        custom_patterns = [
             path('download-pdf/<int:pk>/', views.download_bill_pdf, name='download_bill_pdf'),
         ]
-        return patterns
+        return patterns + custom_patterns
 
 @hooks.register('register_snippet_listing_buttons')
 def add_download_bill_button(snippet, user, next_url=None):
     if isinstance(snippet, Bill):
         try:
-            # Use the correct URL pattern name
+            # Use the correct URL pattern name - Wagtail uses app_label_model format
             url = reverse('billing_bill:download_bill_pdf', kwargs={'pk': snippet.pk})
         except Exception as e:
             logger.error(f"Reverse error: {str(e)}")
-            # Fallback URL
+            # Fallback URL using the standard Wagtail admin pattern
             url = f"/admin/snippets/billing/bill/download-pdf/{snippet.pk}/"
         return [
             SnippetListingButton(
