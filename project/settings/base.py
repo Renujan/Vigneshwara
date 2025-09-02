@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "mail",
     "enquire",
     "order",
+    "billing",
     "search",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",

@@ -108,6 +108,7 @@ class ItemExtraImage(models.Model):
     def __str__(self):
         return f"Extra Image for {self.item.name}"
 
+# Items/models.py
 
 class Stock(models.Model):
     item = models.OneToOneField(
@@ -116,25 +117,30 @@ class Stock(models.Model):
         related_name="stock"
     )
     quantity = models.PositiveIntegerField(default=0)
-    reorder_level = models.PositiveIntegerField(default=10)  # alert if below
+    reorder_level = models.PositiveIntegerField(default=10)
     last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.item.name} - {self.quantity} in stock"
+
+    def has_stock(self, qty):
+        """Check if enough stock is available"""
+        return self.quantity >= qty
 
     def add_stock(self, qty):
         self.quantity += qty
         self.save()
 
     def reduce_stock(self, qty):
-        if qty > self.quantity:
-            raise ValueError("Not enough stock available")
+        if not self.has_stock(qty):
+            # ⚠️ don’t raise ValueError here anymore
+            return False
         self.quantity -= qty
         self.save()
+        return True
 
     @property
     def needs_reorder(self):
         return self.quantity <= self.reorder_level
-
 
 
