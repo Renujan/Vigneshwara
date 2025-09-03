@@ -6,4 +6,5 @@ urlpatterns = [
     path('brands/', BrandListView.as_view(), name='brand-list'),
     path('stocks/', StockListView.as_view(), name='stock-list'),
     path('stocks/<int:pk>/', StockDetailView.as_view(), name='stock-detail'),
+    path('categories/', CategoryListView.as_view(), name='category-list'),
 ]

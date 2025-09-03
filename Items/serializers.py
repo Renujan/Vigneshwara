@@ -84,3 +84,9 @@ class BrandSerializer(serializers.ModelSerializer):
         if obj.photo:
             return obj.photo.file.url
         return None
+from .models import Category
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'description']
