@@ -39,7 +39,7 @@ def add_download_bill_button(snippet, user, next_url=None):
         except Exception as e:
             logger.error(f"Reverse error: {str(e)}")
             # Fallback URL using the standard Wagtail admin pattern
-            url = f"/admin/snippets/billing/bill/download-pdf/{snippet.pk}/"
+            url = f"/snippets/billing/bill/download-pdf/{snippet.pk}/"
         return [
             SnippetListingButton(
                 label='Download Bill',

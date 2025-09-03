@@ -21,7 +21,7 @@ urlpatterns = [
     
 
     path("", include("home.urls")),
-    path("admin/", include(wagtailadmin_urls)),
+    path("", include(wagtailadmin_urls)),
     
     
 
