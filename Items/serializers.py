@@ -1,23 +1,31 @@
 from rest_framework import serializers
 from .models import Item, ItemExtraImage, Stock, Brand, BrandExtraImages
 
-class ItemExtraImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ItemExtraImage
-        fields = ['id', 'image']
-
 class StockSerializer(serializers.ModelSerializer):
     item_name = serializers.CharField(source="item.name", read_only=True)
 
     class Meta:
         model = Stock
         fields = ["id", "item", "item_name", "quantity", "reorder_level", "last_updated", "needs_reorder"]
+class ItemExtraImageSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ItemExtraImage
+        fields = ['id', 'image']
+
+    def get_image(self, obj):
+        if obj.image:
+            return obj.image.file.url  # ✅ Wagtail Image URL
+        return None
+
 
 class ItemSerializer(serializers.ModelSerializer):
     brand = serializers.CharField(source='brand.name')
     category = serializers.CharField(source='category.name')
     item_extra_images = ItemExtraImageSerializer(many=True, read_only=True)
-    stock = StockSerializer(read_only=True)   # ✅ new field
+    stock = StockSerializer(read_only=True)
+    image = serializers.SerializerMethodField()  # ✅ main image
 
     class Meta:
         model = Item
@@ -36,6 +44,12 @@ class ItemSerializer(serializers.ModelSerializer):
             'item_extra_images',
             'stock'
         ]
+
+    def get_image(self, obj):
+        if obj.image:
+            return obj.image.url  # for ImageField, .url works
+        return None
+
 # Serializer for BrandExtraImages
 class BrandExtraImagesSerializer(serializers.ModelSerializer):
     photo = serializers.SerializerMethodField()
