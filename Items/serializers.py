@@ -36,14 +36,24 @@ class ItemSerializer(serializers.ModelSerializer):
             'item_extra_images',
             'stock'
         ]
-
+# Serializer for BrandExtraImages
 class BrandExtraImagesSerializer(serializers.ModelSerializer):
+    photo = serializers.SerializerMethodField()
+
     class Meta:
         model = BrandExtraImages
         fields = ['id', 'photo']
 
+    def get_photo(self, obj):
+        if obj.photo:  # obj.photo is a Wagtail Image
+            # Use obj.photo.file.url to get the actual image URL
+            return obj.photo.file.url
+        return None
+
+# Serializer for Brand
 class BrandSerializer(serializers.ModelSerializer):
     brand_extra_images = BrandExtraImagesSerializer(many=True, read_only=True)
+    photo = serializers.SerializerMethodField()
 
     class Meta:
         model = Brand
@@ -55,3 +65,8 @@ class BrandSerializer(serializers.ModelSerializer):
             'photo',
             'brand_extra_images'
         ]
+
+    def get_photo(self, obj):
+        if obj.photo:
+            return obj.photo.file.url
+        return None
