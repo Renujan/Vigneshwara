@@ -86,7 +86,15 @@ class BrandSerializer(serializers.ModelSerializer):
         return None
 from .models import Category
 
+from rest_framework import serializers
+from .models import Category
+
 class CategorySerializer(serializers.ModelSerializer):
+    item_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description']
+        fields = ['id', 'name', 'description', 'item_count']
+
+    def get_item_count(self, obj):
+        return obj.items.count()  # Use the related_name 'items' to count related items
