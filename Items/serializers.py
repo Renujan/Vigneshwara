@@ -16,7 +16,7 @@ class ItemExtraImageSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            return obj.image.file.url  # ✅ Wagtail Image URL
+            return obj.image.file.url  # ✅ Wagtail Image URL def
         return None
 
 
