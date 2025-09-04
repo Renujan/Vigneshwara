@@ -5,13 +5,22 @@ from rest_framework.response import Response
 from .models import Item,Brand,Stock
 from .serializers import ItemSerializer,BrandSerializer,StockSerializer
 from rest_framework import generics
+from rest_framework import status 
 
 class ItemListView(views.APIView):
     def get(self, request):
         items = Item.objects.all()
         serializer = ItemSerializer(items, many=True)
         return Response(serializer.data)
-    
+
+class ItemDetailView(views.APIView):
+    def get(self, request, pk):
+        try:
+            item = Item.objects.get(pk=pk)
+            serializer = ItemSerializer(item)
+            return Response(serializer.data)
+        except Item.DoesNotExist:
+            return Response({"error": "Item not found"}, status=status.HTTP_404_NOT_FOUND)   
 from rest_framework import generics
 from .models import Category
 from .serializers import CategorySerializer
