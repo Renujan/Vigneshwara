@@ -8,4 +8,5 @@ urlpatterns = [
     path('stocks/', StockListView.as_view(), name='stock-list'),#`show all stocks
     path('stocks/<int:pk>/', StockDetailView.as_view(), name='stock-detail'),#show, update stock by id
     path('categories/', CategoryListView.as_view(), name='category-list'),#show all categories
+    #we have to create path for create, update, delete item, brand, stock, category
 ]
